@@ -1,6 +1,6 @@
 import {useState} from 'react'
 
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 
 import './index.css'
 
@@ -14,20 +14,23 @@ import './index.css'
 
 // import {RxArrowTopRight} from 'react-icons/rx'   <MdSchedule className="route-icon" />
 
-const Header = props => {
+const Header = () => {
   const [isSowMenu, setToggle] = useState(false)
-  const [searchInput, setInput] = useState('')
-  const {handleSearchInputList} = props
+  const [searchQuery, setSearchQuery] = useState('')
+  const history = useHistory()
+
   const toggleMenuBtn = () => {
     setToggle(prev => !prev)
   }
 
   const onChangeInput = event => {
-    setInput(event.target.value)
+    setSearchQuery(event.target.value)
   }
 
-  const onSearchInputList = () => {
-    handleSearchInputList(searchInput)
+  const handleSearch = () => {
+    if (searchQuery) {
+      history.push(`/search/${searchQuery}`)
+    }
   }
 
   return (
@@ -43,13 +46,9 @@ const Header = props => {
             type="text"
             placeholder="Search movies..."
             onChange={onChangeInput}
-            value={searchInput}
+            value={searchQuery}
           />
-          <button
-            type="button"
-            className="search-btn"
-            onClick={onSearchInputList}
-          >
+          <button type="button" className="search-btn" onClick={handleSearch}>
             Search
           </button>
         </div>

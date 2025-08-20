@@ -1,24 +1,20 @@
+// import React from 'react'
 import './index.css'
-import {Link} from 'react-router-dom'
 
-const MovieCard = props => {
-  const {movieDetails} = props
-  const {id, title, posterPath, voteAverage} = movieDetails
-  const imgUrl = `https://image.tmdb.org/t/p/w500/${posterPath}`
-  return (
-    <Link to={`/movie/${id}`} className="movie-link">
-      <li className="movie-card">
-        <img className="img" src={imgUrl} alt={id} />
-        <div className="wrapper-div">
-          <h1 className="movie-name">{title}</h1>
-          <p className="rating">{`${voteAverage.toFixed(1)}/10`}</p>
-        </div>
-        <button type="button" className="view-btn">
-          View Details
-        </button>
-      </li>
-    </Link>
-  )
-}
+const MovieCard = ({movies}) => (
+  <div className="movie-grid">
+    {movies.map(movie => (
+      <div key={movie.id} className="movie-card">
+        <img
+          src={`https://image.tmdb.org/t/p/w185${movie.poster_path}`}
+          alt={movie.title}
+          className="movie-image"
+        />
+        <h3 className="movie-title">{movie.title}</h3>
+        <p className="movie-rating">Rating: {movie.vote_average}</p>
+      </div>
+    ))}
+  </div>
+)
 
 export default MovieCard

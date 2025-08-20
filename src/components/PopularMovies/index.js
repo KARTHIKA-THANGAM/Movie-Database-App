@@ -3,11 +3,12 @@ import {useHistory} from 'react-router-dom'
 import MovieCard from '../MovieCard'
 
 const API_KEY = '24742cf21e90d88d7077d04fefaa9503'
-const topRatedMoviesURL = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`
+const popularMoviesURL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
 
-const TopRated = () => {
-  const [topRatedMovies, setTopRatedMovies] = useState([])
+const PopularMovies = () => {
+  const [popularMovies, setPopularMovies] = useState([])
   const [page, setPage] = useState(1)
+  const maxPages = 10 // Change this to the actual maximum number of pages
 
   const history = useHistory()
 
@@ -15,14 +16,14 @@ const TopRated = () => {
     try {
       const response = await fetch(url)
       const data = await response.json()
-      setTopRatedMovies(data.results)
+      setPopularMovies(data.results)
     } catch (error) {
       console.error('Error fetching movies:', error)
     }
   }
 
   useEffect(() => {
-    fetchMovies(topRatedMoviesURL)
+    fetchMovies(popularMoviesURL)
   }, [page])
 
   const handleViewDetails = movieId => {
@@ -30,7 +31,9 @@ const TopRated = () => {
   }
 
   const handleNextPage = () => {
-    setPage(page + 1)
+    if (page < maxPages) {
+      setPage(page + 1)
+    }
   }
 
   const handlePrevPage = () => {
@@ -40,9 +43,9 @@ const TopRated = () => {
   }
 
   return (
-    <div className="top-rated-movies">
-      <h1 className="movies-heading">Top Rated Movies</h1>
-      <MovieCard movies={topRatedMovies} />
+    <div className="popular-movies">
+      <h1 className="movies-heading">Popular</h1>
+      <MovieCard movies={popularMovies} />
       <button type="button" onClick={handlePrevPage} disabled={page === 1}>
         Prev
       </button>
@@ -57,4 +60,4 @@ const TopRated = () => {
   )
 }
 
-export default TopRated
+export default PopularMovies

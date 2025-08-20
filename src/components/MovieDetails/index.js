@@ -1,4 +1,4 @@
-import {Component} from 'react'
+/* import {Component} from 'react'
 
 import Loader from 'react-loader-spinner'
 
@@ -6,7 +6,7 @@ import './index.css'
 
 import Header from '../Header'
 
-import CastCard from '../CastCard'
+// import CastCard from '../CastCard'  //{<CastCard id={id} />}
 
 const diffStates = {
   inProgress: 'LOADING',
@@ -56,7 +56,7 @@ class MovieDetails extends Component {
   renderSuccessView = () => {
     const {movieDetailsData} = this.state
     const {
-      id,
+      // id,
       originalLanguage,
       // originalTitle,
       overview,
@@ -96,7 +96,6 @@ class MovieDetails extends Component {
             <p className="genre-name">{genres['2'].name}</p>
           </div>
           <h1 className="cast">Cast</h1>
-          <CastCard id={id} />
         </div>
       </div>
     )
@@ -128,6 +127,45 @@ class MovieDetails extends Component {
       </div>
     )
   }
+}
+
+export default MovieDetails
+*/
+
+import {useState, useEffect} from 'react'
+
+const MovieDetails = ({match}) => {
+  const [movie, setMovie] = useState(null)
+  const API_KEY = '24742cf21e90d88d7077d04fefaa9503'
+
+  const fetchMovieDetails = async movieId => {
+    try {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=en-US`,
+      )
+      const data = await response.json()
+      setMovie(data)
+    } catch (error) {
+      console.error('Error fetching movie details:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchMovieDetails(match.params.id)
+  }, [match.params.id])
+
+  return (
+    <div>
+      {movie ? (
+        <div>
+          <h1>{movie.title}</h1>
+          {/* Display other movie details */}
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
+  )
 }
 
 export default MovieDetails
